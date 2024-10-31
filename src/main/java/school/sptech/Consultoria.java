@@ -79,6 +79,7 @@ public class Consultoria {
     }
 
     public Desenvolvedor buscarMenorSalario(){
+        //tentando aprender .stream()
         if(desenvolvedores != null && !desenvolvedores.isEmpty()){
             return this.desenvolvedores.stream()
                     .min(Comparator.comparingDouble(Desenvolvedor::calcularSalario))
@@ -88,18 +89,51 @@ public class Consultoria {
     }
 
     public List<Desenvolvedor> buscarPorTecnologia(String tecnologia){
-        List<Desenvolvedor> DevBuscado = new ArrayList<>();
-        for (Desenvolvedor desenvolvedore : desenvolvedores) {
-            
+        List<Desenvolvedor> devBuscado = new ArrayList<>();
+        for (Desenvolvedor devAtual : desenvolvedores) {
+            if(devAtual instanceof DesenvolvedorWeb){
+                if( ((DesenvolvedorWeb) devAtual).getBackend().equals(tecnologia) ||
+                    ((DesenvolvedorWeb) devAtual).getFrontend().equals(tecnologia) ||
+                    ((DesenvolvedorWeb) devAtual).getSgbd().equals(tecnologia)) {
+
+                    devBuscado.add(devAtual);
+
+                }
+            } else if(devAtual instanceof DesenvolvedorMobile){
+                if( ((DesenvolvedorMobile) devAtual).getPlataforma().equals(tecnologia) ||
+                    ((DesenvolvedorMobile) devAtual).getLinguagem().equals(tecnologia)) {
+
+                    devBuscado.add(devAtual);
+
+                }
+            }
         }
-
-
-        return DevBuscado;
+        return devBuscado;
     }
 
     public Double getTotalSalariosPorTecnologia(String tecnologia){
         Double totalSalario = 0.0;
-
+        for(Desenvolvedor devAtual : desenvolvedores){
+            if(devAtual instanceof DesenvolvedorWeb){
+                if(((DesenvolvedorWeb) devAtual).getBackend().equals(tecnologia)){
+                    totalSalario += devAtual.calcularSalario();
+                }
+                else if(((DesenvolvedorWeb) devAtual).getSgbd().equals(tecnologia)){
+                    totalSalario += devAtual.calcularSalario();
+                }
+                else if(((DesenvolvedorWeb) devAtual).getFrontend().equals(tecnologia)){
+                    totalSalario += devAtual.calcularSalario();
+                }
+            }
+            else if(devAtual instanceof DesenvolvedorMobile){
+                if(((DesenvolvedorMobile) devAtual).getLinguagem().equals(tecnologia)){
+                    totalSalario += devAtual.calcularSalario();
+                }
+                else if(((DesenvolvedorMobile) devAtual).getPlataforma().equals(tecnologia)){
+                    totalSalario += devAtual.calcularSalario();
+                }
+            }
+        }
         return totalSalario;
     }
 
